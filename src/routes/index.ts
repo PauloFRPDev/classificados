@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
+import adsRouter from './ads.routes';
+
 const routes = Router();
 
-routes.get('/', (request, response) => {
-  return response.json({ msg: 'Sucesso' });
-});
+routes.use('/ads', adsRouter);
 
 export default routes;
