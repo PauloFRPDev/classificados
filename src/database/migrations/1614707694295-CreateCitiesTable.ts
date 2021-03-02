@@ -16,7 +16,7 @@ export default class CreateCitiesTable1614707694295
             name: 'id',
             type: 'integer',
             isPrimary: true,
-            generationStrategy: 'increment',
+            isGenerated: true,
           },
           {
             name: 'title',

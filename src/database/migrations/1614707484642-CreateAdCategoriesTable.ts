@@ -16,7 +16,7 @@ export default class CreateAdCategoriesTable1614707484642
             name: 'id',
             type: 'integer',
             isPrimary: true,
-            generationStrategy: 'increment',
+            isGenerated: true,
           },
           {
             name: 'title',

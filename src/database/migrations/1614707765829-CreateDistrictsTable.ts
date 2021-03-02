@@ -16,7 +16,7 @@ export default class CreateDistrictsTable1614707765829
             name: 'id',
             type: 'integer',
             isPrimary: true,
-            generationStrategy: 'increment',
+            isGenerated: true,
           },
           {
             name: 'title',
