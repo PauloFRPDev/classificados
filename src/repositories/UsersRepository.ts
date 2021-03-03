@@ -17,6 +17,7 @@ class UsersRepository extends Repository<User> {
       where: {
         email,
       },
+      select: ['id', 'email', 'password', 'name'],
     });
 
     return findUser || null;

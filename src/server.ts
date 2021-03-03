@@ -8,6 +8,8 @@ import cors from 'cors';
 import routes from './routes';
 import AppError from './errors/AppError';
 
+import './database';
+
 const app = express();
 
 app.use(cors());
