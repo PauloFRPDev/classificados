@@ -9,7 +9,7 @@ import {
 
 @Entity('ad_categories')
 class AdCategory extends BaseEntity {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

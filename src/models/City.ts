@@ -9,7 +9,7 @@ import {
 
 @Entity('cities')
 class City extends BaseEntity {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

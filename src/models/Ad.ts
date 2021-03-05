@@ -59,10 +59,10 @@ class Ad extends BaseEntity {
   @Column({ default: 0 })
   is_published: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   publication_date: Date;
 
-  @Column()
+  @Column({ nullable: true })
   expiration_date: Date;
 
   @CreateDateColumn()

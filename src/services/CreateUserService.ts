@@ -30,7 +30,7 @@ export default class CreateUserService {
 
     user.password = await hash(password, 8);
 
-    await user.save();
+    await usersRepository.save(user);
 
     return user;
   }

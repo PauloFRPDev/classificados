@@ -9,7 +9,7 @@ import {
 
 @Entity('districts')
 class District extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

@@ -50,10 +50,12 @@ export default class CreateAdsTable1614706844949 implements MigrationInterface {
           {
             name: 'publication_date',
             type: 'timestamp',
+            isNullable: true,
           },
           {
             name: 'expiration_date',
             type: 'timestamp',
+            isNullable: true,
           },
           {
             name: 'created_at',
