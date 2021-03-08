@@ -2,9 +2,11 @@ import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
+import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
 
 import AdsRepository from '../repositories/AdsRepository';
 import CreateAdService from '../services/CreateAdService';
+import UpdateAdService from '../services/UpdateAdService';
 
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
 import CreateJurisdictedService from '../services/CreateJurisdictedService';
@@ -66,6 +68,33 @@ adsRouter.post('/', async (request, response) => {
 
   const ad = await createAd.execute({
     cpf,
+    phone_number,
+    email,
+    category_id,
+    city_id,
+    district_id,
+    description,
+  });
+
+  return response.json(ad);
+});
+
+// update
+adsRouter.put('/:id', EnsureAuthenticated, async (request, response) => {
+  const { id } = request.params;
+  const {
+    phone_number,
+    email,
+    category_id,
+    city_id,
+    district_id,
+    description,
+  } = request.body;
+
+  const updateAd = new UpdateAdService();
+
+  const ad = await updateAd.execute({
+    id,
     phone_number,
     email,
     category_id,
