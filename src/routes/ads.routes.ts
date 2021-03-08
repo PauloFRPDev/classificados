@@ -8,6 +8,7 @@ import AdsRepository from '../repositories/AdsRepository';
 import CreateAdService from '../services/CreateAdService';
 import UpdateAdService from '../services/UpdateAdService';
 import DeleteAdService from '../services/DeleteAdService';
+import AcceptAdService from '../services/AcceptAdService';
 
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
 import CreateJurisdictedService from '../services/CreateJurisdictedService';
@@ -117,5 +118,20 @@ adsRouter.delete('/:id', EnsureAuthenticated, async (request, response) => {
 
   return response.status(200).json();
 });
+
+// accept ad
+adsRouter.patch(
+  '/accept/:id',
+  EnsureAuthenticated,
+  async (request, response) => {
+    const { id } = request.params;
+
+    const acceptAd = new AcceptAdService();
+
+    const ad = await acceptAd.execute({ id });
+
+    return response.json(ad);
+  },
+);
 
 export default adsRouter;
