@@ -7,6 +7,7 @@ import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
 import AdsRepository from '../repositories/AdsRepository';
 import CreateAdService from '../services/CreateAdService';
 import UpdateAdService from '../services/UpdateAdService';
+import DeleteAdService from '../services/DeleteAdService';
 
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
 import CreateJurisdictedService from '../services/CreateJurisdictedService';
@@ -104,6 +105,17 @@ adsRouter.put('/:id', EnsureAuthenticated, async (request, response) => {
   });
 
   return response.json(ad);
+});
+
+// delete
+adsRouter.delete('/:id', EnsureAuthenticated, async (request, response) => {
+  const { id } = request.params;
+
+  const deleteAd = new DeleteAdService();
+
+  await deleteAd.execute({ id });
+
+  return response.status(200).json();
 });
 
 export default adsRouter;
