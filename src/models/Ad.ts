@@ -65,6 +65,9 @@ class Ad extends BaseEntity {
   @Column({ nullable: true })
   expiration_date: Date;
 
+  @Column({ nullable: true })
+  deleted_at: Date;
+
   @CreateDateColumn()
   created_at: Date;
 
