@@ -8,7 +8,6 @@ const jurisdictedRoutes = Router();
 
 jurisdictedRoutes.post('/', EnsureIsRegistered, async (request, response) => {
   const { cpf } = request.headers;
-  const { category_id } = request.body;
 
   const userSelected = request.userFiltered;
 
@@ -17,7 +16,7 @@ jurisdictedRoutes.post('/', EnsureIsRegistered, async (request, response) => {
   const jurisdicted = await createJurisdictedService.execute({
     cpf: String(cpf),
     name: userSelected.nomeRazaoSocial,
-    category_id,
+    category_id: userSelected.categoryId,
     registration_number: Number(userSelected.numeroRegistro),
   });
 

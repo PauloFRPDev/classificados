@@ -11,7 +11,8 @@ declare namespace Express {
       telefone: string;
       celular: string;
       endereco: string;
-      situacao_financeira: string;
+      categoryId: number;
+      situacaoFinanceira: string;
     };
   }
 }

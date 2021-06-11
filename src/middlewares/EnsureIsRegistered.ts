@@ -9,6 +9,7 @@ interface requestData {
   telefone: string;
   celular: string;
   endereco: string;
+  categoryId: number;
   situacaoFinanceira: string;
 }
 
@@ -29,8 +30,31 @@ export default async function ensureIsRegistered(
     (user: requestData) => user.cpfcnpj === cpf,
   );
 
+  let jurisdictedCategoryId = 0;
+
+  switch (userFiltered.nome) {
+    case 'AUXILIAR DE PRÓTESE DENTÁRIA':
+      jurisdictedCategoryId = 7;
+      break;
+    case 'AUXILIAR EM SAÚDE BUCAL':
+      jurisdictedCategoryId = 6;
+      break;
+    case 'CIRURGIÃO DENTISTA':
+      jurisdictedCategoryId = 1;
+      break;
+    case 'TÉCNICO EM PRÓTESE DENTÁRIA':
+      jurisdictedCategoryId = 3;
+      break;
+    case 'TÉCNICO EM SAÚDE BUCAL':
+      jurisdictedCategoryId = 5;
+      break;
+    default:
+      throw new Error('Wrong category');
+  }
+
   const userUpdated = {
     ...userFiltered,
+    categoryId: jurisdictedCategoryId,
     situacaoFinanceira:
       userFiltered['situação financeira'] === ''
         ? (userFiltered['situação financeira'] = 'Adimplente')
