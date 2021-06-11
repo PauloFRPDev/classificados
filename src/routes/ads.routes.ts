@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
+import EnsureIsRegistered from '../middlewares/EnsureIsRegistered';
 
 import AdsRepository from '../repositories/AdsRepository';
 import CreateAdService from '../services/CreateAdService';
@@ -16,7 +17,7 @@ import CreateJurisdictedService from '../services/CreateJurisdictedService';
 const adsRouter = Router();
 
 // index
-adsRouter.get('/', async (request, response) => {
+adsRouter.get('/', EnsureIsRegistered, async (request, response) => {
   const adsRepository = getCustomRepository(AdsRepository);
 
   const ads = await adsRepository.find();
