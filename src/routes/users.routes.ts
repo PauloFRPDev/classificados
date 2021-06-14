@@ -2,9 +2,9 @@ import { Router } from 'express';
 
 import CreateUserService from '../services/CreateUserService';
 
-const usersRouter = Router();
+const usersRoutes = Router();
 
-usersRouter.post('/', async (request, response) => {
+usersRoutes.post('/', async (request, response) => {
   const { name, email, password } = request.body;
 
   const createUser = new CreateUserService();
@@ -18,4 +18,4 @@ usersRouter.post('/', async (request, response) => {
   return response.json(user);
 });
 
-export default usersRouter;
+export default usersRoutes;

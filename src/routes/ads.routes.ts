@@ -13,10 +13,10 @@ import AcceptAdService from '../services/AcceptAdService';
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
 import CreateJurisdictedService from '../services/CreateJurisdictedService';
 
-const adsRouter = Router();
+const adsRoutes = Router();
 
 // index
-adsRouter.get('/', async (request, response) => {
+adsRoutes.get('/', async (request, response) => {
   const adsRepository = getCustomRepository(AdsRepository);
 
   const ads = await adsRepository.find();
@@ -25,7 +25,7 @@ adsRouter.get('/', async (request, response) => {
 });
 
 // show
-adsRouter.get('/:id', async (request, response) => {
+adsRoutes.get('/:id', async (request, response) => {
   const { id } = request.params;
 
   const adsRepository = getCustomRepository(AdsRepository);
@@ -40,7 +40,7 @@ adsRouter.get('/:id', async (request, response) => {
 });
 
 // create
-adsRouter.post('/', async (request, response) => {
+adsRoutes.post('/', async (request, response) => {
   const {
     cpf,
     phone_number,
@@ -82,7 +82,7 @@ adsRouter.post('/', async (request, response) => {
 });
 
 // update
-adsRouter.put('/:id', EnsureAuthenticated, async (request, response) => {
+adsRoutes.put('/:id', EnsureAuthenticated, async (request, response) => {
   const { id } = request.params;
   const {
     phone_number,
@@ -109,7 +109,7 @@ adsRouter.put('/:id', EnsureAuthenticated, async (request, response) => {
 });
 
 // delete
-adsRouter.delete('/:id', EnsureAuthenticated, async (request, response) => {
+adsRoutes.delete('/:id', EnsureAuthenticated, async (request, response) => {
   const { id } = request.params;
 
   const deleteAd = new DeleteAdService();
@@ -120,7 +120,7 @@ adsRouter.delete('/:id', EnsureAuthenticated, async (request, response) => {
 });
 
 // accept ad
-adsRouter.patch(
+adsRoutes.patch(
   '/accept/:id',
   EnsureAuthenticated,
   async (request, response) => {
@@ -134,4 +134,4 @@ adsRouter.patch(
   },
 );
 
-export default adsRouter;
+export default adsRoutes;
