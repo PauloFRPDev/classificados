@@ -1,26 +1,13 @@
 import { Router } from 'express';
 
-import CreateJurisdictedService from '../services/CreateJurisdictedService';
-
 import EnsureIsRegistered from '../middlewares/EnsureIsRegistered';
 
 const jurisdictedRoutes = Router();
 
-jurisdictedRoutes.post('/', EnsureIsRegistered, async (request, response) => {
-  const { cpf } = request.headers;
-
+jurisdictedRoutes.get('/', EnsureIsRegistered, async (request, response) => {
   const userSelected = request.userFiltered;
 
-  const createJurisdictedService = new CreateJurisdictedService();
-
-  const jurisdicted = await createJurisdictedService.execute({
-    cpf: String(cpf),
-    name: userSelected.nomeRazaoSocial,
-    category_id: userSelected.categoryId,
-    registration_number: Number(userSelected.numeroRegistro),
-  });
-
-  return response.send(jurisdicted);
+  return response.send(userSelected);
 });
 
 export default jurisdictedRoutes;

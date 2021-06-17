@@ -1,14 +1,20 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, ILike } from 'typeorm';
 
 import City from '../models/City';
 
 const citiesRoutes = Router();
 
 citiesRoutes.get('/', async (request, response) => {
+  const { title } = request.query;
+
   const citiesRepository = getRepository(City);
 
-  const cities = await citiesRepository.find();
+  const cities = await citiesRepository.find({
+    where: {
+      title: ILike(`%${title}%`),
+    },
+  });
 
   const citiesFormatted = cities.map(city => ({
     ...city,

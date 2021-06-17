@@ -1,4 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
+
+import CreateJurisdictedService from '../services/CreateJurisdictedService';
+
+import AppError from '../errors/AppError';
 import api from '../utils/api';
 
 interface requestData {
@@ -26,27 +30,37 @@ export default async function ensureIsRegistered(
 
   const usersRegistered = response.data;
 
-  const userFiltered = usersRegistered.find(
-    (user: requestData) => user.cpfcnpj === cpf,
+  const userFiltered = await usersRegistered.find(
+    (user: requestData) => user.cpfcnpj === String(cpf),
   );
 
+  if (!userFiltered) {
+    throw new AppError('Jurisdicted not found');
+  }
+
   let jurisdictedCategoryId = 0;
+  let jurisdictedCategory = '';
 
   switch (userFiltered.nome) {
     case 'AUXILIAR DE PRÓTESE DENTÁRIA':
       jurisdictedCategoryId = 7;
+      jurisdictedCategory = 'APD';
       break;
     case 'AUXILIAR EM SAÚDE BUCAL':
       jurisdictedCategoryId = 6;
+      jurisdictedCategory = 'ASB';
       break;
     case 'CIRURGIÃO DENTISTA':
       jurisdictedCategoryId = 1;
+      jurisdictedCategory = 'CD';
       break;
     case 'TÉCNICO EM PRÓTESE DENTÁRIA':
       jurisdictedCategoryId = 3;
+      jurisdictedCategory = 'TPD';
       break;
     case 'TÉCNICO EM SAÚDE BUCAL':
       jurisdictedCategoryId = 5;
+      jurisdictedCategory = 'TSB';
       break;
     default:
       throw new Error('Wrong category');
@@ -55,6 +69,7 @@ export default async function ensureIsRegistered(
   const userUpdated = {
     ...userFiltered,
     categoryId: jurisdictedCategoryId,
+    category: jurisdictedCategory,
     situacaoFinanceira:
       userFiltered['situação financeira'] === ''
         ? (userFiltered['situação financeira'] = 'Adimplente')
@@ -62,6 +77,15 @@ export default async function ensureIsRegistered(
   };
 
   request.userFiltered = userUpdated;
+
+  const createJurisdictedService = new CreateJurisdictedService();
+
+  await createJurisdictedService.execute({
+    cpf: String(cpf),
+    name: userUpdated.nomeRazaoSocial,
+    category_id: userUpdated.categoryId,
+    registration_number: Number(userUpdated.numeroRegistro),
+  });
 
   return next();
 }
