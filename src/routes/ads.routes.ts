@@ -11,7 +11,6 @@ import DeleteAdService from '../services/DeleteAdService';
 import AcceptAdService from '../services/AcceptAdService';
 
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
-import CreateJurisdictedService from '../services/CreateJurisdictedService';
 
 const adsRoutes = Router();
 
@@ -56,14 +55,7 @@ adsRoutes.post('/', async (request, response) => {
   const searchJurisdicted = await jurisdictedRepository.findByCpf(cpf);
 
   if (!searchJurisdicted) {
-    const createJurisdicted = new CreateJurisdictedService();
-
-    await createJurisdicted.execute({
-      cpf,
-      name: 'Paulo Felippe',
-      category_id: 1,
-      registration_number: 10000,
-    });
+    throw new AppError('Jurisdicted not found!');
   }
 
   const createAd = new CreateAdService();
