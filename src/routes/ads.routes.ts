@@ -18,7 +18,9 @@ const adsRoutes = Router();
 adsRoutes.get('/', async (request, response) => {
   const adsRepository = getCustomRepository(AdsRepository);
 
-  const ads = await adsRepository.find();
+  const ads = await adsRepository.find({
+    relations: ['city', 'district', 'category', 'jurisdicted'],
+  });
 
   return response.json(ads);
 });

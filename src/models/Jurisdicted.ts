@@ -19,8 +19,8 @@ class Jurisdicted extends BaseEntity {
   @Column({ unique: true })
   cpf: string;
 
-  @OneToMany(() => Ad, ad => ad.cpf)
-  @JoinColumn({ name: 'cpf' })
+  @OneToMany(() => Ad, ad => ad.jurisdicted)
+  @JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
   ads: Ad[];
 
   @Column()
