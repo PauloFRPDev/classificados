@@ -20,6 +20,9 @@ adsRoutes.get('/', async (request, response) => {
 
   const ads = await adsRepository.find({
     relations: ['city', 'district', 'category', 'jurisdicted'],
+    order: {
+      created_at: 'ASC',
+    },
   });
 
   return response.json(ads);
