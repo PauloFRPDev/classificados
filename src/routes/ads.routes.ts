@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, MoreThanOrEqual } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
@@ -16,16 +16,38 @@ const adsRoutes = Router();
 
 // index
 adsRoutes.get('/', async (request, response) => {
+  const { city, district, description } = request.query;
+
   const adsRepository = getCustomRepository(AdsRepository);
 
   const ads = await adsRepository.find({
+    where: {
+      is_published: true,
+      expiration_date: MoreThanOrEqual(new Date(Date.now())),
+    },
     relations: ['city', 'district', 'category', 'jurisdicted'],
+    take: 100,
     order: {
       created_at: 'ASC',
     },
   });
 
-  return response.json(ads);
+  const adsFiltered =
+    (city || district || description) &&
+    ads.filter(ad => {
+      if (
+        (city && ad.city.title.toLowerCase().includes(city as string)) ||
+        (district &&
+          ad.district.title.toLowerCase().includes(district as string)) ||
+        (description &&
+          ad.description.toLowerCase().includes(description as string))
+      ) {
+        return ad;
+      }
+      return null;
+    });
+
+  return response.json(adsFiltered ?? ads);
 });
 
 // show
