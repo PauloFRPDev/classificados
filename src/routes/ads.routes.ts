@@ -1,18 +1,23 @@
 import { Router } from 'express';
 import { getCustomRepository, MoreThanOrEqual } from 'typeorm';
+import multer from 'multer';
 
 import AppError from '../errors/AppError';
 import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
+import uploadConfig from '../config/upload';
 
 import AdsRepository from '../repositories/AdsRepository';
 import CreateAdService from '../services/CreateAdService';
 import UpdateAdService from '../services/UpdateAdService';
 import DeleteAdService from '../services/DeleteAdService';
 import AcceptAdService from '../services/AcceptAdService';
+import InsertFileService from '../services/InsertFileService';
 
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
 
 const adsRoutes = Router();
+
+const upload = multer(uploadConfig.multer);
 
 // index
 adsRoutes.get('/', async (request, response) => {
@@ -150,6 +155,26 @@ adsRoutes.patch(
     const ad = await acceptAd.execute({ id });
 
     return response.json(ad);
+  },
+);
+
+adsRoutes.post(
+  '/:id/files/add',
+  upload.array('files', 2),
+  async (request, response) => {
+    const { id } = request.params;
+    const { files } = request;
+
+    const insertFileService = new InsertFileService();
+
+    if (files) {
+      await insertFileService.execute({
+        ad_id: id,
+        adFilenames: [files[0].filename, files[1].filename],
+      });
+    }
+
+    return response.json();
   },
 );
 

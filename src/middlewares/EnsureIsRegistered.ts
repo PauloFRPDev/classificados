@@ -87,5 +87,9 @@ export default async function ensureIsRegistered(
     registration_number: Number(userUpdated.numeroRegistro),
   });
 
+  if (userUpdated.situacaoFinanceira === 'Inadimplente') {
+    throw new AppError('Jurisdicted is in debt');
+  }
+
   return next();
 }

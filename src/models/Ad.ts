@@ -5,6 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -12,6 +13,7 @@ import {
 import AdCategory from './AdCategory';
 import City from './City';
 import District from './District';
+import File from './File';
 import Jurisdicted from './Jurisdicted';
 
 @Entity('ads')
@@ -67,6 +69,9 @@ class Ad extends BaseEntity {
 
   @Column({ nullable: true })
   deleted_at: Date;
+
+  @OneToMany(() => File, file => file.ad)
+  files: File[];
 
   @CreateDateColumn()
   created_at: Date;
