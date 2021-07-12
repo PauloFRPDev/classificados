@@ -170,7 +170,10 @@ adsRoutes.post(
     if (files) {
       await insertFileService.execute({
         ad_id: id,
-        adFilenames: [files[0].filename, files[1].filename],
+        adFilenames:
+          files.length === 1
+            ? [files[0].filename]
+            : [files[0].filename, files[1].filename],
       });
     }
 

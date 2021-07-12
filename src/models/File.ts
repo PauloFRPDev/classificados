@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -22,6 +23,7 @@ class File extends BaseEntity {
   ad_id: string;
 
   @ManyToOne(() => Ad, ad => ad.files)
+  @JoinColumn({ name: 'ad_id' })
   ad: Ad;
 
   @Column()
