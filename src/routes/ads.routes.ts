@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getCustomRepository, MoreThanOrEqual } from 'typeorm';
 import multer from 'multer';
+import { classToClass } from 'class-transformer';
 
 import AppError from '../errors/AppError';
 import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
@@ -30,7 +31,7 @@ adsRoutes.get('/', async (request, response) => {
       is_published: true,
       expiration_date: MoreThanOrEqual(new Date(Date.now())),
     },
-    relations: ['city', 'district', 'category', 'jurisdicted'],
+    relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
     take: 100,
     order: {
       created_at: 'ASC',
@@ -52,7 +53,7 @@ adsRoutes.get('/', async (request, response) => {
       return null;
     });
 
-  return response.json(adsFiltered ?? ads);
+  return response.json(classToClass(adsFiltered) ?? classToClass(ads));
 });
 
 // show
