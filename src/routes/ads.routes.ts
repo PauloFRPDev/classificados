@@ -22,21 +22,34 @@ const upload = multer(uploadConfig.multer);
 
 // index
 adsRoutes.get('/', async (request, response) => {
-  const { city, district, description } = request.query;
+  const { category, city, district, description } = request.query;
 
   const adsRepository = getCustomRepository(AdsRepository);
 
-  const ads = await adsRepository.find({
-    where: {
-      is_published: true,
-      expiration_date: MoreThanOrEqual(new Date(Date.now())),
-    },
-    relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
-    take: 100,
-    order: {
-      created_at: 'ASC',
-    },
-  });
+  const ads = category
+    ? await adsRepository.find({
+        where: {
+          category_id: category,
+          is_published: true,
+          expiration_date: MoreThanOrEqual(new Date(Date.now())),
+        },
+        relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
+        take: 100,
+        order: {
+          created_at: 'ASC',
+        },
+      })
+    : await adsRepository.find({
+        where: {
+          is_published: true,
+          expiration_date: MoreThanOrEqual(new Date(Date.now())),
+        },
+        relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
+        take: 100,
+        order: {
+          created_at: 'ASC',
+        },
+      });
 
   const adsFiltered =
     (city || district || description) &&
@@ -159,6 +172,7 @@ adsRoutes.patch(
   },
 );
 
+// add files to an ad
 adsRoutes.post(
   '/:id/files/add',
   upload.array('files', 2),
