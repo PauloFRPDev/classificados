@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import AdCategory from './AdCategory';
 import City from './City';
@@ -21,6 +22,7 @@ class Ad extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Exclude()
   @Column()
   cpf: string;
 

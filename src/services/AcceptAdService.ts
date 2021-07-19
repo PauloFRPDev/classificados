@@ -30,7 +30,7 @@ export default class AcceptAdService {
 
     findAd.is_published = true;
     findAd.publication_date = new Date(Date.now());
-    findAd.expiration_date = addMonths(findAd.publication_date, 3);
+    findAd.expiration_date = addMonths(findAd.publication_date, 2);
 
     await adsRepository.save(findAd);
 

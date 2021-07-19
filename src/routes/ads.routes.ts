@@ -7,14 +7,13 @@ import AppError from '../errors/AppError';
 import EnsureAuthenticated from '../middlewares/EnsureAuthenticated';
 import uploadConfig from '../config/upload';
 
+import JurisdictedRepository from '../repositories/JurisdictedRepository';
 import AdsRepository from '../repositories/AdsRepository';
 import CreateAdService from '../services/CreateAdService';
 import UpdateAdService from '../services/UpdateAdService';
 import DeleteAdService from '../services/DeleteAdService';
 import AcceptAdService from '../services/AcceptAdService';
 import InsertFileService from '../services/InsertFileService';
-
-import JurisdictedRepository from '../repositories/JurisdictedRepository';
 
 const adsRoutes = Router();
 
@@ -94,6 +93,7 @@ adsRoutes.post('/', async (request, response) => {
     city_id,
     district_id,
     description,
+    jurisdictedIsInDebt,
   } = request.body;
 
   const jurisdictedRepository = getCustomRepository(JurisdictedRepository);
@@ -114,6 +114,7 @@ adsRoutes.post('/', async (request, response) => {
     city_id,
     district_id,
     description,
+    jurisdictedIsInDebt,
   });
 
   return response.json(ad);
@@ -168,7 +169,7 @@ adsRoutes.patch(
 
     const ad = await acceptAd.execute({ id });
 
-    return response.json(ad);
+    return response.json(classToClass(ad));
   },
 );
 

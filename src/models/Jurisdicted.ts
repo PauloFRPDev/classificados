@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import Ad from './Ad';
 
@@ -16,6 +17,7 @@ class Jurisdicted extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Exclude()
   @Column({ unique: true })
   cpf: string;
 
