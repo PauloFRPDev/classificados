@@ -23,6 +23,24 @@ class AdsRepository extends Repository<Ad> {
 
     return findAd || null;
   }
+
+  public async findCountByYear(): Promise<number[]> {
+    const ads = await this.find();
+
+    const countAdsByMonth: number[] = [];
+
+    let month = 0;
+
+    while (month < 12) {
+      // eslint-disable-next-line no-loop-func
+      const filteredAds = ads.filter(ad => ad.created_at.getMonth() === month);
+      countAdsByMonth.push(filteredAds.length);
+
+      month += 1;
+    }
+
+    return countAdsByMonth;
+  }
 }
 
 export default AdsRepository;
