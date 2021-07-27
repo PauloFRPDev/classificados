@@ -34,10 +34,13 @@ class AdsRepository extends Repository<Ad> {
     const ads = await this.find({
       where: {
         is_published: false,
+        deleted_at: null,
       },
+      relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
       order: {
         created_at: 'ASC',
       },
+      take: 100,
     });
 
     return ads;
