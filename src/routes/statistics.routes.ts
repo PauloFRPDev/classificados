@@ -20,4 +20,16 @@ statisticsRoutes.get(
   },
 );
 
+statisticsRoutes.get(
+  '/ads/total_category',
+  EnsureAuthenticated,
+  async (request, response) => {
+    const adsRepository = getCustomRepository(AdsRepository);
+
+    const countTotalAdsPerCategory = await adsRepository.findCountAdsPerCategory();
+
+    return response.json(countTotalAdsPerCategory);
+  },
+);
+
 export default statisticsRoutes;
