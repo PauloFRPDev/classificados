@@ -30,6 +30,19 @@ class AdsRepository extends Repository<Ad> {
     return findAd || null;
   }
 
+  public async findAdsToBeActivated(): Promise<Ad[] | []> {
+    const ads = await this.find({
+      where: {
+        is_published: false,
+      },
+      order: {
+        created_at: 'ASC',
+      },
+    });
+
+    return ads;
+  }
+
   public async findCountByYear(): Promise<number[]> {
     const ads = await this.find();
 
