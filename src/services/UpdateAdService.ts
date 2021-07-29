@@ -33,7 +33,7 @@ export default class UpdateAdService {
       throw new AppError('Ad not found.');
     }
 
-    if (!findAd.deleted_at !== null) {
+    if (findAd.deleted_at !== null) {
       throw new AppError('You can not update a deleted Ad.');
     }
 
