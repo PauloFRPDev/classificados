@@ -35,6 +35,6 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-app.listen(3333, () => {
+app.listen(process.env.API_PORT, () => {
   console.log('🚀 Server started on port 3333!');
 });
