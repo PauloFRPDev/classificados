@@ -6,7 +6,6 @@ import AppError from '../errors/AppError';
 
 import authConfig from '../config/auth';
 
-import User from '../models/User';
 import UsersRepository from '../repositories/UsersRepository';
 
 interface RequestData {
@@ -15,7 +14,12 @@ interface RequestData {
 }
 
 interface ResponseData {
-  user: User;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    password?: string;
+  };
   token: string;
 }
 

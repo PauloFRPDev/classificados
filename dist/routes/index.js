@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const users_routes_1 = __importDefault(require("./users.routes"));
+const sessions_routes_1 = __importDefault(require("./sessions.routes"));
+const ads_routes_1 = __importDefault(require("./ads.routes"));
+const jurisdicted_routes_1 = __importDefault(require("./jurisdicted.routes"));
+const categories_routes_1 = __importDefault(require("./categories.routes"));
+const cities_routes_1 = __importDefault(require("./cities.routes"));
+const districts_routes_1 = __importDefault(require("./districts.routes"));
+const statistics_routes_1 = __importDefault(require("./statistics.routes"));
+const routes = express_1.Router();
+routes.use('/users', users_routes_1.default);
+routes.use('/sessions', sessions_routes_1.default);
+routes.use('/categories', categories_routes_1.default);
+routes.use('/ads', ads_routes_1.default);
+routes.use('/jurisdicted', jurisdicted_routes_1.default);
+routes.use('/cities', cities_routes_1.default);
+routes.use('/districts', districts_routes_1.default);
+routes.use('/statistics', statistics_routes_1.default);
+exports.default = routes;
