@@ -9,7 +9,7 @@ const statisticsRoutes = Router();
 
 // Get number of ads on the current year
 statisticsRoutes.get(
-  '/ads/total',
+  '/announcements/total',
   EnsureAuthenticated,
   async (request, response) => {
     const adsRepository = getCustomRepository(AdsRepository);
@@ -21,7 +21,7 @@ statisticsRoutes.get(
 );
 
 statisticsRoutes.get(
-  '/ads/total_category',
+  '/announcements/total_category',
   EnsureAuthenticated,
   async (request, response) => {
     const adsRepository = getCustomRepository(AdsRepository);

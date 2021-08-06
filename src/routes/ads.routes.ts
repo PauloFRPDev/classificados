@@ -184,7 +184,7 @@ adsRoutes.patch(
 
 // add files to an ad
 adsRoutes.post(
-  '/:id/files/add',
+  '/:id/files/insert',
   upload.array('files', 2),
   async (request, response) => {
     const { id } = request.params;

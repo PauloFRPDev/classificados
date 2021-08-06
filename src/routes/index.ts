@@ -16,7 +16,7 @@ routes.use('/users', usersRoutes);
 routes.use('/sessions', sessionsRoutes);
 
 routes.use('/categories', categoriesRoutes);
-routes.use('/ads', adsRoutes);
+routes.use('/announcements', adsRoutes);
 routes.use('/jurisdicted', jurisdictedRoutes);
 routes.use('/cities', citiesRoutes);
 routes.use('/districts', districtsRoutes);
