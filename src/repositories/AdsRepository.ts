@@ -36,7 +36,14 @@ class AdsRepository extends Repository<Ad> {
         is_published: false,
         deleted_at: null,
       },
-      relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
+      relations: [
+        'city',
+        'district',
+        'category',
+        'jurisdicted',
+        'jurisdicted.category',
+        'files',
+      ],
       order: {
         created_at: 'ASC',
       },

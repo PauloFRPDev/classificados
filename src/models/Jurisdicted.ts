@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,6 +12,7 @@ import {
 import { Exclude } from 'class-transformer';
 
 import Ad from './Ad';
+import JurisdictedCategory from './JurisdictedCategory';
 
 @Entity('jurisdicted')
 class Jurisdicted extends BaseEntity {
@@ -30,6 +32,10 @@ class Jurisdicted extends BaseEntity {
 
   @Column()
   category_id: number;
+
+  @ManyToOne(() => JurisdictedCategory)
+  @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
+  category: JurisdictedCategory;
 
   @Column()
   registration_number: number;
