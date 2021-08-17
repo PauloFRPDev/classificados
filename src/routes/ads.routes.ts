@@ -31,6 +31,7 @@ adsRoutes.get('/', async (request, response) => {
           category_id: category,
           is_published: true,
           expiration_date: MoreThanOrEqual(new Date(Date.now())),
+          deleted_at: null,
         },
         relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
         take: 100,
@@ -42,6 +43,7 @@ adsRoutes.get('/', async (request, response) => {
         where: {
           is_published: true,
           expiration_date: MoreThanOrEqual(new Date(Date.now())),
+          deleted_at: null,
         },
         relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
         take: 100,
