@@ -21,12 +21,18 @@ const upload = multer(uploadConfig.multer);
 
 // index
 adsRoutes.get('/', async (request, response) => {
-  const { category, city, district, description } = request.query;
+  const { category, city, district, description, page } = request.query;
+
+  // Pagination
+  const selectedPage = Number(page) || 1;
+  const limitOfAdsPerPage = 3;
+  const skipAds =
+    selectedPage === 1 ? 0 : (selectedPage - 1) * limitOfAdsPerPage;
 
   const adsRepository = getCustomRepository(AdsRepository);
 
-  const ads = category
-    ? await adsRepository.find({
+  const [ads, total] = category
+    ? await adsRepository.findAndCount({
         where: {
           category_id: category,
           is_published: true,
@@ -34,19 +40,21 @@ adsRoutes.get('/', async (request, response) => {
           deleted_at: null,
         },
         relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
-        take: 100,
+        take: limitOfAdsPerPage,
+        skip: skipAds,
         order: {
           created_at: 'ASC',
         },
       })
-    : await adsRepository.find({
+    : await adsRepository.findAndCount({
         where: {
           is_published: true,
           expiration_date: MoreThanOrEqual(new Date(Date.now())),
           deleted_at: null,
         },
         relations: ['city', 'district', 'category', 'jurisdicted', 'files'],
-        take: 100,
+        take: limitOfAdsPerPage,
+        skip: skipAds,
         order: {
           created_at: 'ASC',
         },
@@ -67,16 +75,12 @@ adsRoutes.get('/', async (request, response) => {
       return null;
     });
 
-  return response.json(classToClass(adsFiltered) ?? classToClass(ads));
-});
+  const adsWithTotalPages = {
+    announcements: classToClass(adsFiltered) ?? classToClass(ads),
+    totalPages: total / limitOfAdsPerPage,
+  };
 
-// index all ads that needs to be accepted
-adsRoutes.get('/to_accept', EnsureAuthenticated, async (request, response) => {
-  const adsRepository = getCustomRepository(AdsRepository);
-
-  const ads = await adsRepository.findAdsToBeActivated();
-
-  return response.json(classToClass(ads));
+  return response.json(adsWithTotalPages);
 });
 
 // show
