@@ -83,6 +83,15 @@ adsRoutes.get('/', async (request, response) => {
   return response.json(adsWithTotalPages);
 });
 
+// index all ads that needs to be accepted
+adsRoutes.get('/to_accept', EnsureAuthenticated, async (request, response) => {
+  const adsRepository = getCustomRepository(AdsRepository);
+
+  const ads = await adsRepository.findAdsToBeActivated();
+
+  return response.json(classToClass(ads));
+});
+
 // show
 adsRoutes.get('/:id', async (request, response) => {
   const { id } = request.params;
