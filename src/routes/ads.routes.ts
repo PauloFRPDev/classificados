@@ -25,7 +25,7 @@ adsRoutes.get('/', async (request, response) => {
 
   // Pagination
   const selectedPage = Number(page) || 1;
-  const limitOfAdsPerPage = 100;
+  const limitOfAdsPerPage = 3;
   const skipAds =
     selectedPage === 1 ? 0 : (selectedPage - 1) * limitOfAdsPerPage;
 
