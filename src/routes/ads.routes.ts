@@ -25,7 +25,7 @@ adsRoutes.get('/', async (request, response) => {
 
   // Pagination
   const selectedPage = Number(page) || 1;
-  const limitOfAdsPerPage = 3;
+  const limitOfAdsPerPage = 100;
   const skipAds =
     selectedPage === 1 ? 0 : (selectedPage - 1) * limitOfAdsPerPage;
 
@@ -77,7 +77,7 @@ adsRoutes.get('/', async (request, response) => {
 
   const adsWithTotalPages = {
     announcements: classToClass(adsFiltered) ?? classToClass(ads),
-    totalPages: total / limitOfAdsPerPage,
+    totalPages: Math.ceil(total / limitOfAdsPerPage),
   };
 
   return response.json(adsWithTotalPages);
