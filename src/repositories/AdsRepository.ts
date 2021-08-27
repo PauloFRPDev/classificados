@@ -20,6 +20,33 @@ class AdsRepository extends Repository<Ad> {
     return findAd || null;
   }
 
+  public async findAllByRegistrationNumber(
+    registrationNumber?: number,
+  ): Promise<Ad[] | null> {
+    const findAds = await this.find({
+      relations: [
+        'city',
+        'district',
+        'category',
+        'jurisdicted',
+        'files',
+        'jurisdicted.category',
+      ],
+    });
+
+    if (registrationNumber) {
+      const filteredAds = findAds.filter(ad =>
+        String(ad.jurisdicted.registration_number).includes(
+          String(registrationNumber),
+        ),
+      );
+
+      return filteredAds;
+    }
+
+    return findAds;
+  }
+
   public async findById(id: string): Promise<Ad | null> {
     const findAd = await this.findOne({
       where: {
@@ -30,7 +57,9 @@ class AdsRepository extends Repository<Ad> {
     return findAd || null;
   }
 
-  public async findAdsToBeActivated(): Promise<Ad[] | []> {
+  public async findAdsToBeActivated(
+    registrationNumber?: number,
+  ): Promise<Ad[] | []> {
     const ads = await this.find({
       where: {
         is_published: false,
@@ -49,6 +78,16 @@ class AdsRepository extends Repository<Ad> {
       },
       take: 100,
     });
+
+    if (registrationNumber) {
+      const filteredAds = ads.filter(ad =>
+        String(ad.jurisdicted.registration_number).includes(
+          String(registrationNumber),
+        ),
+      );
+
+      return filteredAds;
+    }
 
     return ads;
   }

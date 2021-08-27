@@ -85,11 +85,28 @@ adsRoutes.get('/', async (request, response) => {
 
 // index all ads that needs to be accepted
 adsRoutes.get('/to_accept', EnsureAuthenticated, async (request, response) => {
+  const { registrationNumber } = request.query;
+
   const adsRepository = getCustomRepository(AdsRepository);
 
-  const ads = await adsRepository.findAdsToBeActivated();
+  const ads = await adsRepository.findAdsToBeActivated(
+    Number(registrationNumber),
+  );
 
   return response.json(classToClass(ads));
+});
+
+// index all for admin
+adsRoutes.get('/admin/list', EnsureAuthenticated, async (request, response) => {
+  const { registrationNumber } = request.query;
+
+  const adsRepository = getCustomRepository(AdsRepository);
+
+  const ads = await adsRepository.findAllByRegistrationNumber(
+    Number(registrationNumber),
+  );
+
+  return response.json(ads);
 });
 
 // show
