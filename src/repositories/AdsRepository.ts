@@ -47,7 +47,7 @@ class AdsRepository extends Repository<Ad> {
       order: {
         created_at: 'ASC',
       },
-      take: 100,
+      take: 200,
     });
 
     return ads;
