@@ -25,7 +25,7 @@ adsRoutes.get('/', async (request, response) => {
 
   // Pagination
   const selectedPage = Number(page) || 1;
-  const limitOfAdsPerPage = 3;
+  const limitOfAdsPerPage = 100;
   const skipAds =
     selectedPage === 1 ? 0 : (selectedPage - 1) * limitOfAdsPerPage;
 
@@ -77,7 +77,7 @@ adsRoutes.get('/', async (request, response) => {
 
   const adsWithTotalPages = {
     announcements: classToClass(adsFiltered) ?? classToClass(ads),
-    totalPages: total / limitOfAdsPerPage,
+    totalPages: Math.ceil(total / limitOfAdsPerPage),
   };
 
   return response.json(adsWithTotalPages);
@@ -85,11 +85,28 @@ adsRoutes.get('/', async (request, response) => {
 
 // index all ads that needs to be accepted
 adsRoutes.get('/to_accept', EnsureAuthenticated, async (request, response) => {
+  const { registrationNumber } = request.query;
+
   const adsRepository = getCustomRepository(AdsRepository);
 
-  const ads = await adsRepository.findAdsToBeActivated();
+  const ads = await adsRepository.findAdsToBeActivated(
+    Number(registrationNumber),
+  );
 
   return response.json(classToClass(ads));
+});
+
+// index all for admin
+adsRoutes.get('/admin/list', EnsureAuthenticated, async (request, response) => {
+  const { registrationNumber } = request.query;
+
+  const adsRepository = getCustomRepository(AdsRepository);
+
+  const ads = await adsRepository.findAllByRegistrationNumber(
+    Number(registrationNumber),
+  );
+
+  return response.json(ads);
 });
 
 // show
