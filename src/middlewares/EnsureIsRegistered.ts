@@ -25,7 +25,7 @@ export default async function ensureIsRegistered(
   const { cpf } = request.headers;
 
   const response = await api.get(
-    '/siscaf/servico/api/RelatoriosPersonalizados?sistema=SISCAF&modulo=ADMINISTRATIVO&nomeRelatorio=RELA%C3%87%C3%83O%20DE%20PROFISSIONAIS%2FEMPRESAS&%40TIPO=8',
+    '/siscaf/servico/api/RelatoriosPersonalizados?sistema=SISCAF&modulo=ADMINISTRATIVO&nomeRelatorio=RELA%C3%87%C3%83O%20DE%20PROFISSIONAIS%2FEMPRESAS',
   );
 
   const usersRegistered = response.data;
