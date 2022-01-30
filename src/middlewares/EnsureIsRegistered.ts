@@ -36,11 +36,12 @@ export default async function ensureIsRegistered(
     (user: requestData) => user.cpfcnpj === String(cpf),
   );
 
-  if (!usersFiltered) {
+  if (usersFiltered.length === 0) {
     throw new AppError('Jurisdicted not found');
   }
 
   const newList = [] as requestData[];
+  let count = 0;
 
   usersFiltered.forEach(async (userFiltered: requestData) => {
     let jurisdictedCategoryId = 0;
@@ -97,17 +98,29 @@ export default async function ensureIsRegistered(
     }
 
     request.usersFiltered = newList;
-  });
 
-  setTimeout(() => {
+    count += 1;
+
     if (
+      usersFiltered.length === count &&
       !request.usersFiltered?.filter(
         user => user.situacaoFinanceira !== 'Inadimplente',
       )
     ) {
       throw new AppError('Jurisdicted is in debt');
+    } else if (usersFiltered.length === count) {
+      return next();
     }
+  });
 
-    return next();
-  }, 2000);
+  // setTimeout(() => {
+  // if (
+  //   !request.usersFiltered?.filter(
+  //     user => user.situacaoFinanceira !== 'Inadimplente',
+  //   )
+  // ) {
+  //   throw new AppError('Jurisdicted is in debt');
+  // }
+
+  // }, 2000);
 }
