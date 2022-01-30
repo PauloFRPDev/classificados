@@ -154,7 +154,6 @@ adsRoutes.get('/', async (request, response) => {
 adsRoutes.post('/', async (request, response) => {
   const {
     cpf,
-    subscriptionCategory,
     subscriptionNumber,
     phone_number,
     email,
