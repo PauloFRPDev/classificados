@@ -20,11 +20,11 @@ class Jurisdicted extends BaseEntity {
   id: string;
 
   @Exclude()
-  @Column({ unique: true })
+  @Column()
   cpf: string;
 
   @OneToMany(() => Ad, ad => ad.jurisdicted)
-  @JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
+  @JoinColumn()
   ads: Ad[];
 
   @Column()

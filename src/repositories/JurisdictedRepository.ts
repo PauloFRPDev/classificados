@@ -12,6 +12,20 @@ class JurisdictedRepository extends Repository<Jurisdicted> {
 
     return findJurisdicted || null;
   }
+
+  public async findByCpfAndRegistrationNumber(
+    cpf: string,
+    registrationNumber: number,
+  ): Promise<Jurisdicted | null> {
+    const findJurisdicted = await this.findOne({
+      where: {
+        cpf,
+        registration_number: registrationNumber,
+      },
+    });
+
+    return findJurisdicted || null;
+  }
 }
 
 export default JurisdictedRepository;

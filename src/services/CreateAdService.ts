@@ -2,11 +2,13 @@ import { getCustomRepository, MoreThanOrEqual } from 'typeorm';
 
 import AppError from '../errors/AppError';
 
+import Jurisdicted from '../models/Jurisdicted';
 import Ad from '../models/Ad';
 import AdsRepository from '../repositories/AdsRepository';
 
 interface RequestData {
   cpf: string;
+  searchJurisdicted: Jurisdicted;
   phone_number: string;
   email: string;
   category_id: number;
@@ -19,6 +21,7 @@ interface RequestData {
 export default class CreateAdService {
   public async execute({
     cpf,
+    searchJurisdicted,
     phone_number,
     email,
     category_id,
@@ -67,6 +70,7 @@ export default class CreateAdService {
     }
 
     const ad = adsRepository.create({
+      jurisdicted_id: searchJurisdicted.id,
       cpf,
       phone_number,
       email,

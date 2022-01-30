@@ -5,9 +5,9 @@ import EnsureIsRegistered from '../middlewares/EnsureIsRegistered';
 const jurisdictedRoutes = Router();
 
 jurisdictedRoutes.get('/', EnsureIsRegistered, async (request, response) => {
-  const userSelected = request.userFiltered;
+  const usersSelected = request.usersFiltered;
 
-  return response.send(userSelected);
+  return response.send(usersSelected);
 });
 
 export default jurisdictedRoutes;

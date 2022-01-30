@@ -1,3 +1,4 @@
+import Jurisdicted from 'src/models/Jurisdicted';
 import { getCustomRepository } from 'typeorm';
 
 import JurisdictedRepository from '../repositories/JurisdictedRepository';
@@ -15,10 +16,13 @@ export default class CreateJurisdictedService {
     name,
     category_id,
     registration_number,
-  }: RequestData): Promise<void> {
+  }: RequestData): Promise<Jurisdicted> {
     const jurisdictedRepository = getCustomRepository(JurisdictedRepository);
 
-    const searchJurisdicted = await jurisdictedRepository.findByCpf(cpf);
+    const searchJurisdicted = await jurisdictedRepository.findByCpfAndRegistrationNumber(
+      cpf,
+      registration_number,
+    );
 
     if (!searchJurisdicted) {
       const jurisdicted = jurisdictedRepository.create({
@@ -29,6 +33,10 @@ export default class CreateJurisdictedService {
       });
 
       await jurisdictedRepository.save(jurisdicted);
+
+      return jurisdicted;
     }
+
+    return searchJurisdicted;
   }
 }

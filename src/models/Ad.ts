@@ -26,8 +26,11 @@ class Ad extends BaseEntity {
   @Column()
   cpf: string;
 
-  @ManyToOne(() => Jurisdicted, jurisdicted => jurisdicted.ads)
-  @JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
+  @Column()
+  jurisdicted_id: string;
+
+  @ManyToOne(() => Jurisdicted)
+  @JoinColumn({ name: 'jurisdicted_id' })
   jurisdicted: Jurisdicted;
 
   @Column()

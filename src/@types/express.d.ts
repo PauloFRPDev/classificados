@@ -3,7 +3,8 @@ declare namespace Express {
     user: {
       id: string;
     };
-    userFiltered: {
+    usersFiltered: {
+      jurisdictedId?: string;
       nome: string;
       numeroRegistro: string;
       nomeRazaoSocial: string;
@@ -13,6 +14,6 @@ declare namespace Express {
       endereco: string;
       categoryId: number;
       situacaoFinanceira: string;
-    };
+    }[];
   }
 }

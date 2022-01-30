@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 
+import Jurisdicted from 'src/models/Jurisdicted';
 import CreateJurisdictedService from '../services/CreateJurisdictedService';
 
 import AppError from '../errors/AppError';
 import api from '../utils/api';
 
 interface requestData {
+  jurisdictedId?: string;
   nome: string;
   numeroRegistro: string;
   nomeRazaoSocial: string;
@@ -30,66 +32,82 @@ export default async function ensureIsRegistered(
 
   const usersRegistered = response.data;
 
-  const userFiltered = await usersRegistered.find(
+  const usersFiltered = await usersRegistered.filter(
     (user: requestData) => user.cpfcnpj === String(cpf),
   );
 
-  if (!userFiltered) {
+  if (!usersFiltered) {
     throw new AppError('Jurisdicted not found');
   }
 
-  let jurisdictedCategoryId = 0;
-  let jurisdictedCategory = '';
+  const newList = [] as requestData[];
 
-  switch (userFiltered.nome) {
-    case 'AUXILIAR DE PRÓTESE DENTÁRIA':
-      jurisdictedCategoryId = 7;
-      jurisdictedCategory = 'APD';
-      break;
-    case 'AUXILIAR EM SAÚDE BUCAL':
-      jurisdictedCategoryId = 6;
-      jurisdictedCategory = 'ASB';
-      break;
-    case 'CIRURGIÃO DENTISTA':
-      jurisdictedCategoryId = 1;
-      jurisdictedCategory = 'CD';
-      break;
-    case 'TÉCNICO EM PRÓTESE DENTÁRIA':
-      jurisdictedCategoryId = 3;
-      jurisdictedCategory = 'TPD';
-      break;
-    case 'TÉCNICO EM SAÚDE BUCAL':
-      jurisdictedCategoryId = 5;
-      jurisdictedCategory = 'TSB';
-      break;
-    default:
-      throw new Error('Wrong category');
-  }
+  usersFiltered.forEach(async (userFiltered: requestData) => {
+    let jurisdictedCategoryId = 0;
+    let jurisdictedCategory = '';
 
-  const userUpdated = {
-    ...userFiltered,
-    categoryId: jurisdictedCategoryId,
-    category: jurisdictedCategory,
-    situacaoFinanceira:
-      userFiltered['situação financeira'] === ''
-        ? (userFiltered['situação financeira'] = 'Adimplente')
-        : userFiltered['situação financeira'],
-  };
+    switch (userFiltered.nome) {
+      case 'AUXILIAR DE PRÓTESE DENTÁRIA':
+        jurisdictedCategoryId = 7;
+        jurisdictedCategory = 'APD';
+        break;
+      case 'AUXILIAR EM SAÚDE BUCAL':
+        jurisdictedCategoryId = 6;
+        jurisdictedCategory = 'ASB';
+        break;
+      case 'CIRURGIÃO DENTISTA':
+        jurisdictedCategoryId = 1;
+        jurisdictedCategory = 'CD';
+        break;
+      case 'TÉCNICO EM PRÓTESE DENTÁRIA':
+        jurisdictedCategoryId = 3;
+        jurisdictedCategory = 'TPD';
+        break;
+      case 'TÉCNICO EM SAÚDE BUCAL':
+        jurisdictedCategoryId = 5;
+        jurisdictedCategory = 'TSB';
+        break;
+      default:
+        throw new Error('Wrong category');
+    }
 
-  request.userFiltered = userUpdated;
+    const userUpdated = {
+      ...userFiltered,
+      categoryId: jurisdictedCategoryId,
+      category: jurisdictedCategory,
+      situacaoFinanceira:
+        userFiltered['situação financeira'] === ''
+          ? (userFiltered['situação financeira'] = 'Adimplente')
+          : userFiltered['situação financeira'],
+    };
 
-  const createJurisdictedService = new CreateJurisdictedService();
+    const createJurisdictedService = new CreateJurisdictedService();
 
-  await createJurisdictedService.execute({
-    cpf: String(cpf),
-    name: userUpdated.nomeRazaoSocial,
-    category_id: userUpdated.categoryId,
-    registration_number: Number(userUpdated.numeroRegistro),
+    const createdJurisdicted: Jurisdicted = await createJurisdictedService.execute(
+      {
+        cpf: String(cpf),
+        name: userUpdated.nomeRazaoSocial,
+        category_id: userUpdated.categoryId,
+        registration_number: Number(userUpdated.numeroRegistro),
+      },
+    );
+
+    if (userUpdated.situacaoFinanceira !== 'Inadimplente') {
+      newList.push({ ...userUpdated, jurisdictedId: createdJurisdicted.id });
+    }
+
+    request.usersFiltered = newList;
   });
 
-  if (userUpdated.situacaoFinanceira === 'Inadimplente') {
-    throw new AppError('Jurisdicted is in debt');
-  }
+  setTimeout(() => {
+    if (
+      !request.usersFiltered?.filter(
+        user => user.situacaoFinanceira !== 'Inadimplente',
+      )
+    ) {
+      throw new AppError('Jurisdicted is in debt');
+    }
 
-  return next();
+    return next();
+  }, 2000);
 }
