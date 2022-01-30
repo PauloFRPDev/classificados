@@ -150,6 +150,47 @@ adsRoutes.get('/', async (request, response) => {
   return response.json(adsWithTotalPages);
 });
 
+// index all ads that needs to be accepted
+adsRoutes.get('/to_accept', EnsureAuthenticated, async (request, response) => {
+  const { registrationNumber } = request.query;
+
+  const adsRepository = getCustomRepository(AdsRepository);
+
+  const ads = await adsRepository.findAdsToBeActivated(
+    Number(registrationNumber),
+  );
+
+  return response.json(classToClass(ads));
+});
+
+// index all for admin
+adsRoutes.get('/admin/list', EnsureAuthenticated, async (request, response) => {
+  const { registrationNumber } = request.query;
+
+  const adsRepository = getCustomRepository(AdsRepository);
+
+  const ads = await adsRepository.findAllByRegistrationNumber(
+    Number(registrationNumber),
+  );
+
+  return response.json(ads);
+});
+
+// show
+adsRoutes.get('/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const adsRepository = getCustomRepository(AdsRepository);
+
+  const ad = await adsRepository.findById(id);
+
+  if (!ad) {
+    throw new AppError('Ad not found.');
+  }
+
+  return response.json(ad);
+});
+
 // create
 adsRoutes.post('/', async (request, response) => {
   const {
