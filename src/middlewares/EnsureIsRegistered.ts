@@ -56,7 +56,7 @@ export default async function ensureIsRegistered(
         jurisdictedCategoryId = 6;
         jurisdictedCategory = 'ASB';
         break;
-      case 'CIRURGIÃO DENTISTA':
+      case 'CIRURGIÃO-DENTISTA':
         jurisdictedCategoryId = 1;
         jurisdictedCategory = 'CD';
         break;
