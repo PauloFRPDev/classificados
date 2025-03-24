@@ -8,15 +8,16 @@ import api from '../utils/api';
 
 interface requestData {
   jurisdictedId?: string;
-  nome: string;
-  numeroRegistro: string;
-  nomeRazaoSocial: string;
-  cpfcnpj: string;
-  telefone: string;
-  celular: string;
-  endereco: string;
+  Nome: string;
+  NumeroRegistro: string;
+  NomeRazaoSocial: string;
+  CPFCNPJ: string;
+  Telefone: string;
+  Celular: string;
+  Endereco: string;
   categoryId: number;
   situacaoFinanceira: string;
+  'Situação financeira': string;
 }
 
 export default async function ensureIsRegistered(
@@ -33,7 +34,7 @@ export default async function ensureIsRegistered(
   const usersRegistered = response.data;
 
   const usersFiltered = await usersRegistered.filter(
-    (user: requestData) => user.cpfcnpj === String(cpf),
+    (user: requestData) => user.CPFCNPJ === String(cpf),
   );
 
   if (usersFiltered.length === 0) {
@@ -47,7 +48,7 @@ export default async function ensureIsRegistered(
     let jurisdictedCategoryId = 0;
     let jurisdictedCategory = '';
 
-    switch (userFiltered.nome) {
+    switch (userFiltered.Nome) {
       case 'AUXILIAR DE PRÓTESE DENTÁRIA':
         jurisdictedCategoryId = 7;
         jurisdictedCategory = 'APD';
@@ -76,10 +77,7 @@ export default async function ensureIsRegistered(
       ...userFiltered,
       categoryId: jurisdictedCategoryId,
       category: jurisdictedCategory,
-      situacaoFinanceira:
-        userFiltered['situação financeira'] === ''
-          ? (userFiltered['situação financeira'] = 'Adimplente')
-          : userFiltered['situação financeira'],
+      situacaoFinanceira: userFiltered['Situação financeira'],
     };
 
     const createJurisdictedService = new CreateJurisdictedService();
@@ -87,9 +85,9 @@ export default async function ensureIsRegistered(
     const createdJurisdicted: Jurisdicted = await createJurisdictedService.execute(
       {
         cpf: String(cpf),
-        name: userUpdated.nomeRazaoSocial,
+        name: userUpdated.NomeRazaoSocial,
         category_id: userUpdated.categoryId,
-        registration_number: Number(userUpdated.numeroRegistro),
+        registration_number: Number(userUpdated.NumeroRegistro),
       },
     );
 
