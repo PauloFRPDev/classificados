@@ -5,13 +5,13 @@ declare namespace Express {
     };
     usersFiltered: {
       jurisdictedId?: string;
-      Nome: string;
-      NumeroRegistro: string;
-      NomeRazaoSocial: string;
-      CPFCNPJ: string;
-      Telefone: string;
-      Celular: string;
-      Endereco: string;
+      nome: string;
+      numeroRegistro: string;
+      nomeRazaoSocial: string;
+      cpfcnpj: string;
+      telefone: string;
+      celular: string;
+      endereco: string;
       categoryId: number;
       situacaoFinanceira: string;
     }[];

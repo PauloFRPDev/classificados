@@ -16,7 +16,6 @@ interface requestData {
   Celular: string;
   Endereco: string;
   categoryId: number;
-  situacaoFinanceira: string;
   'Situação financeira': string;
 }
 
@@ -41,7 +40,7 @@ export default async function ensureIsRegistered(
     throw new AppError('Jurisdicted not found');
   }
 
-  const newList = [] as requestData[];
+  const newList = [] as Request['usersFiltered'];
   let count = 0;
 
   usersFiltered.forEach(async (userFiltered: requestData) => {
@@ -74,7 +73,13 @@ export default async function ensureIsRegistered(
     }
 
     const userUpdated = {
-      ...userFiltered,
+      nome: userFiltered.NomeRazaoSocial,
+      numeroRegistro: userFiltered.NumeroRegistro,
+      nomeRazaoSocial: userFiltered.NomeRazaoSocial,
+      cpfcnpj: userFiltered.CPFCNPJ,
+      telefone: userFiltered.Telefone,
+      celular: userFiltered.Celular,
+      endereco: userFiltered.Endereco,
       categoryId: jurisdictedCategoryId,
       category: jurisdictedCategory,
       situacaoFinanceira: userFiltered['Situação financeira'],
@@ -85,9 +90,9 @@ export default async function ensureIsRegistered(
     const createdJurisdicted: Jurisdicted = await createJurisdictedService.execute(
       {
         cpf: String(cpf),
-        name: userUpdated.NomeRazaoSocial,
+        name: userUpdated.nomeRazaoSocial,
         category_id: userUpdated.categoryId,
-        registration_number: Number(userUpdated.NumeroRegistro),
+        registration_number: Number(userUpdated.numeroRegistro),
       },
     );
 
